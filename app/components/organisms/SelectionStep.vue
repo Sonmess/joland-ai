@@ -1,13 +1,23 @@
 <script setup lang="ts" generic="TId extends string">
+import type { CardSelectVariant } from '~/composables/useSoundEffects'
 import type { CardOption } from '~/types/horoscope'
 
-defineProps<{
+const props = defineProps<{
   title: string
   subtitle?: string
   options: CardOption<TId>[]
+  /** Which chime this step plays — each step has its own note. */
+  sound: CardSelectVariant
 }>()
 
 const model = defineModel<TId | null>({ required: true })
+
+const { playCardSelect } = useSoundEffects()
+
+const select = (id: TId) => {
+  playCardSelect(props.sound)
+  model.value = id
+}
 </script>
 
 <template>
@@ -21,7 +31,7 @@ const model = defineModel<TId | null>({ required: true })
         :label="option.label"
         :sublabel="option.sublabel"
         :selected="model === option.id"
-        @select="model = option.id"
+        @select="select(option.id)"
       />
     </div>
   </div>

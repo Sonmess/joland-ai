@@ -1,11 +1,13 @@
 <script setup lang="ts">
 const { horoscope, generateHoroscope, reset } = useHoroscope()
+const { playReveal } = useSoundEffects()
 
 const isRevealed = ref(false)
 
 const reveal = () => {
   if (isRevealed.value) return
   generateHoroscope()
+  playReveal()
   isRevealed.value = true
 }
 

@@ -44,6 +44,7 @@ watch(currentStep, async (step, previous) => {
         title="Kto ste?"
         subtitle="Karty prehovoria inak k pánom a inak k dámam."
         :options="GENDERS"
+        sound="gender"
       />
 
       <Transition name="step">
@@ -55,6 +56,7 @@ watch(currentStep, async (step, previous) => {
           title="Aký je váš stav?"
           subtitle="Osud srdca sa vykladá podľa cesty, ktorou kráčate."
           :options="statusOptions"
+          sound="status"
         />
       </Transition>
 
@@ -67,6 +69,7 @@ watch(currentStep, async (step, previous) => {
           title="Vaše znamenie"
           subtitle="Zverokruh je kľúčom k vašej veštbe."
           :options="zodiacOptions"
+          sound="zodiac"
         />
       </Transition>
 
