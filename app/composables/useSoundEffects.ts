@@ -23,7 +23,10 @@ const SELECT_ROOTS: Record<CardSelectVariant, number> = {
   zodiac: 233.08, // B♭3
 }
 
+const STORAGE_KEY = 'jolandai-sound-muted'
+
 let audioContext: AudioContext | null = null
+let mutedRestored = false
 
 // Created lazily inside a click handler, which also satisfies autoplay policies.
 const getContext = (): AudioContext | null => {
@@ -52,12 +55,27 @@ const playTone = (ctx: AudioContext, { frequency, start = 0, duration, volume, t
 
 /** Synthesized mystic sound effects — no audio assets needed. */
 export const useSoundEffects = () => {
+  const muted = useState<boolean>('sound:muted', () => false)
+
+  // Restore the persisted preference once, after hydration, so the
+  // server-rendered markup (muted = false) never mismatches.
+  onMounted(() => {
+    if (mutedRestored) return
+    mutedRestored = true
+    muted.value = localStorage.getItem(STORAGE_KEY) === '1'
+  })
+
+  const toggleMuted = (): void => {
+    muted.value = !muted.value
+    if (import.meta.client) localStorage.setItem(STORAGE_KEY, muted.value ? '1' : '0')
+  }
   /**
    * Warm, dark toll built on the given root note: soft sub an octave below,
    * root with a minor third above, and a faint octave overtone. All sine —
    * no bright partials, so nothing rings metallic.
    */
   const playSelectChime = (root: number): void => {
+    if (muted.value) return
     const ctx = getContext()
     if (!ctx) return
     playTone(ctx, { frequency: root / 2, duration: 1.0, volume: 0.09, attack: 0.04 })
@@ -73,6 +91,7 @@ export const useSoundEffects = () => {
 
   /** Slow dark rite — deep drone, unsettling swell, low rising minor arpeggio. */
   const playReveal = (): void => {
+    if (muted.value) return
     const ctx = getContext()
     if (!ctx) return
 
@@ -94,5 +113,5 @@ export const useSoundEffects = () => {
     playTone(ctx, { frequency: 1174.66, start: 1.5, duration: 1.6, volume: 0.012, attack: 0.1 })
   }
 
-  return { playCardSelect, playReveal }
+  return { muted, toggleMuted, playCardSelect, playReveal }
 }

@@ -78,9 +78,6 @@ watch(currentStep, async (step, previous) => {
       </Transition>
     </section>
 
-    <footer class="px-6 pb-10 text-center text-xs text-mystic-400/60">
-      <p>JolandAI — hviezdy na dosah. Horoskopy slúžia len na zábavu.</p>
-    </footer>
   </main>
 </template>
 

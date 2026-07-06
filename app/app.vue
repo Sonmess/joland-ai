@@ -7,5 +7,6 @@ const { sign } = useHoroscope()
     <StarfieldBackground />
     <ZodiacConstellation :sign="sign" />
     <NuxtPage />
+    <AppFooter />
   </div>
 </template>
