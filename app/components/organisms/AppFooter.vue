@@ -1,10 +1,17 @@
 <script setup lang="ts">
 const { muted, toggleMuted, playCardSelect } = useSoundEffects()
+const { voiceMuted, toggleVoiceMuted, playVoiceLine } = useVoiceLines()
 
 const onToggleSound = () => {
   toggleMuted()
   // A soft confirmation chime when turning sound back on
   if (!muted.value) playCardSelect('gender')
+}
+
+const onToggleVoice = () => {
+  toggleVoiceMuted()
+  // Jolanda confirms her own comeback
+  if (!voiceMuted.value) playVoiceLine('a-jeje-to-sem-se-bala')
 }
 
 const scrollToTop = () => {
@@ -21,6 +28,19 @@ const scrollToTop = () => {
       </div>
 
       <div class="flex items-center gap-3">
+        <IconButton
+          :aria-label="voiceMuted ? 'Zapnúť Jolanda hlášky' : 'Vypnúť Jolanda hlášky'"
+          :title="voiceMuted ? 'Zapnúť Jolanda hlášky' : 'Vypnúť Jolanda hlášky'"
+          @click="onToggleVoice"
+        >
+          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3a2.5 2.5 0 0 1 2.5 2.5v5a2.5 2.5 0 0 1-5 0v-5A2.5 2.5 0 0 1 12 3Z" />
+            <path d="M7 10.5a5 5 0 0 0 10 0" />
+            <path d="M12 15.5V19" />
+            <path d="M9 19h6" />
+            <line v-if="voiceMuted" x1="5" y1="4" x2="19" y2="20" />
+          </svg>
+        </IconButton>
         <IconButton
           :aria-label="muted ? 'Zapnúť zvukové efekty' : 'Vypnúť zvukové efekty'"
           :title="muted ? 'Zapnúť zvukové efekty' : 'Vypnúť zvukové efekty'"

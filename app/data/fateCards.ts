@@ -1,0 +1,117 @@
+import type { FateCard } from '~/types/fate'
+
+/**
+ * Jolanda's fate deck — situations inspired by real tarot arcana, each mapped
+ * to one of her recorded hlášky where a fitting one exists. Cards without a
+ * recording fall back to the synth reveal chime. Adding a card = one entry.
+ */
+export const FATE_CARDS: FateCard[] = [
+  {
+    id: 'slnko',
+    name: 'Slnko',
+    numeral: 'XIX',
+    symbol: '☀︎',
+    mood: 'good',
+    meaning: 'Šťastie a úspech',
+    interpretation:
+      'Karta čistej radosti. Úspech, na ktorom pracujete, dozrieva — a hviezdy hovoria, že mierite vysoko. Nechajte sa hriať.',
+    voiceLine: 'hodne-vysoko-miris',
+  },
+  {
+    id: 'veza',
+    name: 'Veža',
+    numeral: 'XVI',
+    symbol: '♜',
+    mood: 'bad',
+    meaning: 'Pohroma a otras',
+    interpretation:
+      'Niečo, čo vyzeralo pevné, sa môže otriasť v základoch. Nebojte sa — Veža búra len to, čo aj tak nemalo vydržať.',
+    voiceLine: 'tady-vidim-velky-spatny',
+  },
+  {
+    id: 'smrt',
+    name: 'Smrť',
+    numeral: 'XIII',
+    symbol: '☠︎',
+    mood: 'bad',
+    meaning: 'Koniec a premena',
+    interpretation:
+      'Neľakajte sa mena — Smrť je karta premeny. Niečo staré končí, aby uvoľnilo miesto novému. Pustite to.',
+    voiceLine: 'a-jeje-to-sem-se-bala',
+  },
+  {
+    id: 'devat-mecov',
+    name: 'Deväť mečov',
+    numeral: 'IX',
+    symbol: '⚕︎',
+    mood: 'bad',
+    meaning: 'Choroba a úzkosť',
+    interpretation:
+      'Karta ťažkých nocí a starostí o zdravie. Doprajte telu aj duši odpočinok — a nezanedbajte prevenciu.',
+    voiceLine: 'to-je-zla-nemoc',
+  },
+  {
+    id: 'diabol',
+    name: 'Diabol',
+    numeral: 'XV',
+    symbol: '⛧',
+    mood: 'bad',
+    meaning: 'Pokušenie a závislosť',
+    interpretation:
+      'Pokušenie a závislosti majú tento týždeň navrch. Dávajte pozor, komu a čomu prepadnete — a strážte rodinné úspory.',
+    voiceLine: 'vas-manzel-hraje-automaty',
+  },
+  {
+    id: 'hviezda',
+    name: 'Hviezda',
+    numeral: 'XVII',
+    symbol: '★',
+    mood: 'good',
+    meaning: 'Nádej a záchrana',
+    interpretation:
+      'Nádej po búrke. Nech ste klesli akokoľvek hlboko, práve teraz sa začínate dvíhať — a pôjde to rýchlejšie, než čakáte.',
+    voiceLine: 'ale-ze-sracek-muzete-vytahnout-se',
+  },
+  {
+    id: 'mesiac',
+    name: 'Mesiac',
+    numeral: 'XVIII',
+    symbol: '☾',
+    mood: 'neutral',
+    meaning: 'Ilúzie a znamenia',
+    interpretation:
+      'Nie všetko je také, ako vyzerá. Znamenia sú čudné a hmla hustá — nerobte veľké rozhodnutia, kým sa nerozjasní.',
+    voiceLine: 'to-neni-normalni',
+  },
+  {
+    id: 'pat-minci',
+    name: 'Päť mincí',
+    numeral: 'V',
+    symbol: '⛤',
+    mood: 'bad',
+    meaning: 'Bieda a núdza',
+    interpretation:
+      'Karta prázdnych vreciek. Peniaze tento týždeň radšej dvakrát prepočítajte — no pamätajte, bohatstvo nie je len v minciach.',
+    voiceLine: 'vy-mate-dobry-nemate-nic',
+  },
+  {
+    id: 'milenci',
+    name: 'Milenci',
+    numeral: 'VI',
+    symbol: '♥︎',
+    mood: 'good',
+    meaning: 'Láska a voľba srdca',
+    interpretation:
+      'Karta srdca. Láska, partnerstvo alebo veľká voľba citov stojí pred vami — vyberajte srdcom, no oči nechajte otvorené.',
+  },
+  {
+    id: 'koleso-stastia',
+    name: 'Koleso šťastia',
+    numeral: 'X',
+    symbol: '☸︎',
+    mood: 'neutral',
+    meaning: 'Zmena osudu',
+    interpretation:
+      'Osud sa otáča. Veľká zmena je blízko a nedá sa jej vyhnúť — dá sa na ňu len dobre nastúpiť.',
+  },
+]

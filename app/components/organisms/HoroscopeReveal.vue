@@ -1,13 +1,16 @@
 <script setup lang="ts">
 const { horoscope, generateHoroscope, reset } = useHoroscope()
 const { playReveal } = useSoundEffects()
+const { playVoiceLine } = useVoiceLines()
 
 const isRevealed = ref(false)
 
 const reveal = () => {
   if (isRevealed.value) return
   generateHoroscope()
-  playReveal()
+  // Jolanda's verdict takes precedence; the synth shimmer is the stand-in
+  // when her hlášky are muted.
+  if (!playVoiceLine('tady-vidim-velky-spatny')) playReveal()
   isRevealed.value = true
 }
 
@@ -23,9 +26,10 @@ const startOver = () => {
       Vaša veštba
     </SectionHeading>
 
-    <div class="perspective-distant">
-      <component
-        :is="isRevealed ? 'div' : 'button'"
+    <div class="flex flex-wrap items-start justify-center gap-10 md:gap-14">
+      <div class="perspective-distant">
+        <component
+          :is="isRevealed ? 'div' : 'button'"
         :type="isRevealed ? undefined : 'button'"
         class="relative block h-[28rem] w-72 transform-3d transition-transform duration-1000 md:h-[32rem] md:w-80"
         :class="[
@@ -64,6 +68,11 @@ const startOver = () => {
           </CardFrame>
         </div>
       </component>
+      </div>
+
+      <Transition name="fate">
+        <FateCardReveal v-if="isRevealed" />
+      </Transition>
     </div>
 
     <Transition name="fade">
@@ -78,5 +87,16 @@ const startOver = () => {
 }
 .fade-enter-from {
   opacity: 0;
+}
+
+/* The fate card arrives once the horoscope card has finished flipping */
+.fate-enter-active {
+  transition:
+    opacity 0.8s ease 1.1s,
+    transform 0.8s ease 1.1s;
+}
+.fate-enter-from {
+  opacity: 0;
+  transform: translateY(1.5rem);
 }
 </style>

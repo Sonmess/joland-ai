@@ -1,14 +1,13 @@
-import { CAREER, CLOSINGS, LOVE_BY_STATUS, OPENINGS } from '~/data/horoscopes'
+import { HOROSCOPES } from '~/data/horoscopes'
 import { ZODIAC_SIGNS } from '~/data/options'
 import type { GenderId, Horoscope, StatusId, ZodiacId } from '~/types/horoscope'
 
-const pickRandom = <T>(items: T[]): T => items[Math.floor(Math.random() * items.length)]!
-
 /**
- * Selection state and horoscope generation for the reading flow.
+ * Selection state and horoscope resolution for the reading flow.
  *
- * Generation is a placeholder (random Slovak fragments) — swapping it for a real
- * AI call later only means replacing the body of `generateHoroscope`.
+ * Texts come from the pre-written catalog in `data/horoscopes.ts`. When AI
+ * generation is added, `generateHoroscope` becomes the place that calls the
+ * API and falls back to this catalog on failure.
  */
 export const useHoroscope = () => {
   const gender = useState<GenderId | null>('horoscope:gender', () => null)
@@ -27,18 +26,13 @@ export const useHoroscope = () => {
   })
 
   const generateHoroscope = (): void => {
-    if (!isComplete.value) return
+    if (gender.value === null || status.value === null || sign.value === null) return
 
     const zodiac = ZODIAC_SIGNS.find((z) => z.id === sign.value)!
 
     horoscope.value = {
       title: `${zodiac.symbol} ${zodiac.label}`,
-      paragraphs: [
-        pickRandom(OPENINGS).replaceAll('{sign}', zodiac.label),
-        pickRandom(LOVE_BY_STATUS[status.value!]),
-        pickRandom(CAREER),
-        pickRandom(CLOSINGS),
-      ],
+      paragraphs: HOROSCOPES[sign.value][status.value][gender.value],
     }
   }
 
