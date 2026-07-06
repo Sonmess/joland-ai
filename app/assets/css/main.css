@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Cinzel", serif;
+  --font-body: "Inter", sans-serif;
+
+  /* Deep midnight background scale */
+  --color-midnight-950: #050512;
+  --color-midnight-900: #0b0b1e;
+  --color-midnight-800: #12102a;
+  --color-midnight-700: #1a1533;
+  --color-midnight-600: #241d47;
+  --color-midnight-500: #322a5e;
+
+  /* Warm gold accents */
+  --color-gold-200: #f7e9b7;
+  --color-gold-300: #f0d989;
+  --color-gold-400: #e3c563;
+  --color-gold-500: #d4af37;
+  --color-gold-600: #b3922c;
+  --color-gold-700: #8c7122;
+
+  /* Violet mystic accents */
+  --color-mystic-200: #ddd6fe;
+  --color-mystic-300: #c4b5fd;
+  --color-mystic-400: #a78bfa;
+  --color-mystic-500: #8b5cf6;
+  --color-mystic-600: #7c3aed;
+  --color-mystic-700: #5b3aa8;
+
+  --animate-twinkle: twinkle 3s ease-in-out infinite;
+  --animate-float: float 6s ease-in-out infinite;
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-midnight-950);
+  color: var(--color-mystic-200);
+  font-family: var(--font-body);
+}
