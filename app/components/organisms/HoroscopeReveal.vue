@@ -1,16 +1,13 @@
 <script setup lang="ts">
 const { horoscope, generateHoroscope, reset } = useHoroscope()
 const { playReveal } = useSoundEffects()
-const { playVoiceLine } = useVoiceLines()
 
 const isRevealed = ref(false)
 
 const reveal = () => {
   if (isRevealed.value) return
   generateHoroscope()
-  // Jolanda's verdict takes precedence; the synth shimmer is the stand-in
-  // when her hlášky are muted.
-  if (!playVoiceLine('tady-vidim-velky-spatny')) playReveal()
+  playReveal()
   isRevealed.value = true
 }
 
