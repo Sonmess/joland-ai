@@ -1,8 +1,8 @@
 import type { GenderOption, StatusOption, ZodiacSign } from '~/types/horoscope'
 
 export const GENDERS: GenderOption[] = [
-  { id: 'muz', label: 'Muž', symbol: '☉' },
-  { id: 'zena', label: 'Žena', symbol: '☽' },
+  { id: 'muz', label: 'Muž', symbol: '♂︎' },
+  { id: 'zena', label: 'Žena', symbol: '♀︎' },
 ]
 
 export const STATUSES: StatusOption[] = [
