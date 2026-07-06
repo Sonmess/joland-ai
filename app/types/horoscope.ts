@@ -38,6 +38,14 @@ export interface ZodiacSign extends CardOption<ZodiacId> {
   dateRange: string
 }
 
+/** Simplified star chart of a zodiac constellation, drawn in the background. */
+export interface Constellation {
+  /** Star positions normalized to a 0–100 square; index 0 is the brightest star. */
+  stars: [number, number][]
+  /** Connecting lines as index pairs into `stars`. */
+  lines: [number, number][]
+}
+
 export interface Horoscope {
   title: string
   paragraphs: string[]
