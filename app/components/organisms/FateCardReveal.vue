@@ -40,7 +40,7 @@ const symbolColorByMood: Record<FateCardMood, string> = {
       <component
         :is="card ? 'div' : 'button'"
         :type="card ? undefined : 'button'"
-        class="relative block h-[28rem] w-72 transform-3d transition-transform duration-1000 md:h-[32rem] md:w-80"
+        class="relative block h-112 w-72 transform-3d transition-transform duration-1000 md:h-128 md:w-80"
         :class="
           card
             ? 'rotate-y-180'

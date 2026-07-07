@@ -28,7 +28,7 @@ const startOver = () => {
         <component
           :is="isRevealed ? 'div' : 'button'"
         :type="isRevealed ? undefined : 'button'"
-        class="relative block h-[28rem] w-72 transform-3d transition-transform duration-1000 md:h-[32rem] md:w-80"
+        class="relative block h-112 w-72 transform-3d transition-transform duration-1000 md:h-128 md:w-80"
         :class="[
           isRevealed
             ? 'rotate-y-180'
