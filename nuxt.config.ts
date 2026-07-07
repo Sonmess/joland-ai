@@ -29,6 +29,7 @@ export default defineNuxtConfig({
             'JolandAI vám vytvorí horoskop na mieru. Vyberte si svoje znamenie a nechajte karty prehovoriť.',
         },
       ],
+      link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
     },
   },
 })
