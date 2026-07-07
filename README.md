@@ -17,6 +17,9 @@ Horoscopes are for entertainment only. Jolanda insists.
 - 🎴 **Karta osudu** — after the reading, a second card is drawn from a 15-card
   fate deck inspired by real tarot arcana (Veža, Smrť, Diabol, Koleso šťastia…),
   uniform random with no immediate repeats
+- 🃏 **Zmena osudu** — a deck browser: all 15 fate cards laid out face-down,
+  numbered I–XV, pick whichever fate you dare — perfect for replaying favorite
+  voice lines
 - 🗣️ **Jolanda voice lines** — each fate card plays a matching mp3 recording
 - 🎵 **Synthesized sound effects** — Web Audio API chimes (no audio assets),
   a descending D-minor motif across the three selection steps
@@ -69,16 +72,18 @@ app/
 │  └─ fateCards.ts            # Jolanda's 15-card fate deck
 ├─ composables/
 │  ├─ useHoroscope.ts         # selection state + horoscope lookup
-│  ├─ useFateCard.ts          # fate deck draw (no immediate repeats)
+│  ├─ useFateCard.ts          # shared fate card state: random draw or deck
+│  │                          # pick, no immediate repeats, card sounds
 │  ├─ useSoundEffects.ts      # Web Audio synth chimes + mute state
 │  └─ useVoiceLines.ts        # mp3 voice line registry + mute state
+├─ utils/roman.ts             # Roman numeral helper for the deck backs
 ├─ sounds/                    # Jolanda's recordings (imported via Vite)
 ├─ components/
 │  ├─ atoms/                  # CardFrame, TarotCard visuals, logo, buttons,
 │  │                          # starfield, zodiac constellation
 │  ├─ molecules/              # TarotCard, StepIndicator
 │  └─ organisms/              # HeroSection, SelectionStep, HoroscopeReveal,
-│                             # FateCardReveal, AppFooter
+│                             # FateCardReveal, FateDeck, AppFooter
 ├─ pages/index.vue            # the single-page flow
 └─ app.vue                    # background layers + page + footer
 ```
@@ -98,6 +103,14 @@ combinations exist. A second later, `FateCardReveal` slides in — `useFateCard`
 draws uniformly from the deck (never the same card twice in a row), the card
 flips with a mood-colored glow (gold / crimson / violet), and its voice line
 plays.
+
+**The fate deck.** The "Zmena osudu" button swaps the fate card for `FateDeck`:
+all 15 cards face-down in arcana order, backs numbered sequentially I–XV
+(decoupled from the real arcana numerals, which contain duplicates — both
+Pustovník and Deväť mečov are IX). Picking one sets the shared card state in
+`useFateCard`, plays its voice line, and flips it in the fate-card slot; manual
+picks also update the no-repeat memory used by random draws. The card state is
+shared (`useState`) precisely so the random flow and the deck flow stay in sync.
 
 **Sound.** Two independent systems, each with its own persisted mute toggle in
 the footer: `useSoundEffects` synthesizes everything with the Web Audio API
@@ -119,7 +132,9 @@ breaks backface culling. Card glows use `box-shadow` for this reason.
 ## Extending
 
 - **Add a fate card:** drop an entry into `data/fateCards.ts` (id, name,
-  numeral, symbol, mood, interpretation, optional `voiceLine`). That's it.
+  numeral, symbol, mood, interpretation, optional `voiceLine`) — keep the
+  array sorted by arcana numeral; it's also the display order of the
+  "Zmena osudu" deck.
 - **Add a voice line:** put the mp3 in `app/sounds/`, register it in
   `useVoiceLines.ts` (import + one registry entry) — the `VoiceLineId` type
   updates automatically and card assignments are type-checked.

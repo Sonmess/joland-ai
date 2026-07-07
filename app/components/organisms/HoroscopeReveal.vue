@@ -1,8 +1,10 @@
 <script setup lang="ts">
 const { horoscope, generateHoroscope, reset } = useHoroscope()
 const { playReveal } = useSoundEffects()
+const { resetFate } = useFateCard()
 
 const isRevealed = ref(false)
+const isDeckOpen = ref(false)
 
 const reveal = () => {
   if (isRevealed.value) return
@@ -11,8 +13,14 @@ const reveal = () => {
   isRevealed.value = true
 }
 
+const toggleDeck = () => {
+  isDeckOpen.value = !isDeckOpen.value
+}
+
 const startOver = () => {
   isRevealed.value = false
+  isDeckOpen.value = false
+  resetFate()
   reset()
 }
 </script>
@@ -67,13 +75,22 @@ const startOver = () => {
       </component>
       </div>
 
+      <!-- One outer transition for the delayed entrance; the deck/card swap
+           inside is instant — mode="out-in" swaps proved unreliable here and
+           FateCardReveal animates its own flip on mount anyway. -->
       <Transition name="fate">
-        <FateCardReveal v-if="isRevealed" />
+        <div v-if="isRevealed" class="flex flex-col items-center">
+          <FateDeck v-if="isDeckOpen" @close="isDeckOpen = false" />
+          <FateCardReveal v-else />
+        </div>
       </Transition>
     </div>
 
     <Transition name="fade">
-      <BaseButton v-if="isRevealed" variant="ghost" @click="startOver">Nový výklad</BaseButton>
+      <div v-if="isRevealed" class="flex flex-wrap items-center justify-center gap-4">
+        <BaseButton variant="ghost" @click="startOver">Nový výklad</BaseButton>
+        <BaseButton variant="ghost" @click="toggleDeck">Zmena osudu</BaseButton>
+      </div>
     </Transition>
   </div>
 </template>
@@ -96,4 +113,5 @@ const startOver = () => {
   opacity: 0;
   transform: translateY(1.5rem);
 }
+
 </style>

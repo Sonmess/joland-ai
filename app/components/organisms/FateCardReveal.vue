@@ -1,18 +1,30 @@
 <script setup lang="ts">
-import type { FateCard, FateCardMood } from '~/types/fate'
+import type { FateCardMood } from '~/types/fate'
 
-const { drawCard } = useFateCard()
-const { playReveal } = useSoundEffects()
-const { playVoiceLine } = useVoiceLines()
+const { current, drawRandom } = useFateCard()
 
-const card = ref<FateCard | null>(null)
+// The card can be set externally (deck pick) while this component mounts —
+// start face-down and flip on the next frame so the animation always plays.
+const flipped = ref(false)
+
+watch(
+  current,
+  async (card) => {
+    if (!card) {
+      flipped.value = false
+      return
+    }
+    await nextTick()
+    requestAnimationFrame(() => {
+      flipped.value = true
+    })
+  },
+  { immediate: true },
+)
 
 const reveal = () => {
-  if (card.value) return
-  const drawn = drawCard()
-  card.value = drawn
-  const spoke = drawn.voiceLine ? playVoiceLine(drawn.voiceLine) : false
-  if (!spoke) playReveal()
+  if (current.value) return
+  drawRandom()
 }
 
 // Box-shadow, not drop-shadow: a CSS filter anywhere in the flip's 3D context
@@ -38,15 +50,17 @@ const symbolColorByMood: Record<FateCardMood, string> = {
 
     <div class="perspective-distant">
       <component
-        :is="card ? 'div' : 'button'"
-        :type="card ? undefined : 'button'"
+        :is="current ? 'div' : 'button'"
+        :type="current ? undefined : 'button'"
         class="relative block h-112 w-72 transform-3d transition-transform duration-1000 md:h-128 md:w-80"
         :class="
-          card
+          flipped
             ? 'rotate-y-180'
-            : 'cursor-pointer hover:drop-shadow-[0_0_20px_rgba(139,92,246,0.4)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold-400'
+            : current
+              ? ''
+              : 'cursor-pointer hover:drop-shadow-[0_0_20px_rgba(139,92,246,0.4)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold-400'
         "
-        :aria-label="card ? undefined : 'Otočiť kartu osudu'"
+        :aria-label="current ? undefined : 'Otočiť kartu osudu'"
         @click="reveal"
       >
         <!-- Card back -->
@@ -61,17 +75,17 @@ const symbolColorByMood: Record<FateCardMood, string> = {
         </div>
 
         <!-- Card face -->
-        <div class="absolute inset-0 rounded-xl rotate-y-180 backface-hidden" :class="card ? glowByMood[card.mood] : ''">
+        <div class="absolute inset-0 rounded-xl rotate-y-180 backface-hidden" :class="current ? glowByMood[current.mood] : ''">
           <CardFrame>
-            <div v-if="card" class="flex flex-1 flex-col items-center gap-4 overflow-y-auto px-5 py-6 text-center">
-              <span class="font-display text-sm tracking-[0.3em] text-gold-500/80">{{ card.numeral }}</span>
-              <span class="font-display text-6xl md:text-7xl" :class="symbolColorByMood[card.mood]" aria-hidden="true">
-                {{ card.symbol }}
+            <div v-if="current" class="flex flex-1 flex-col items-center gap-4 overflow-y-auto px-5 py-6 text-center">
+              <span class="font-display text-sm tracking-[0.3em] text-gold-500/80">{{ current.numeral }}</span>
+              <span class="font-display text-6xl md:text-7xl" :class="symbolColorByMood[current.mood]" aria-hidden="true">
+                {{ current.symbol }}
               </span>
-              <h3 class="font-display text-2xl text-gold-300">{{ card.name }}</h3>
-              <span class="text-xs tracking-[0.25em] text-mystic-300/80 uppercase">{{ card.meaning }}</span>
+              <h3 class="font-display text-2xl text-gold-300">{{ current.name }}</h3>
+              <span class="text-xs tracking-[0.25em] text-mystic-300/80 uppercase">{{ current.meaning }}</span>
               <span class="h-px w-24 bg-gold-500/50" aria-hidden="true" />
-              <p class="text-sm leading-relaxed text-mystic-200/90">{{ card.interpretation }}</p>
+              <p class="text-sm leading-relaxed text-mystic-200/90">{{ current.interpretation }}</p>
             </div>
           </CardFrame>
         </div>
